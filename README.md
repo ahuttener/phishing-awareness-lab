@@ -1,4 +1,5 @@
 <div align="center">
+<img src="docs/banner.jpg" alt="Phishing Awareness Lab — detect, analyze and prevent phishing attacks" width="100%">
 
 # 🎣 Phishing Awareness Lab
 
