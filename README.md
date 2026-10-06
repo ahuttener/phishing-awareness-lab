@@ -118,6 +118,10 @@ Building the campaign is 20% of the value. The portfolio payoff is the
 > Cloudflare — see the worked example in
 > [analysis/email-auth-checklist.md](analysis/email-auth-checklist.md).
 
+📄 A full defensive write-up template, pre-filled with that real DMARC rollout,
+lives in **[analysis/sample-findings.md](analysis/sample-findings.md)** — adapt
+it with your own campaign numbers after a run.
+
 ## 📝 License
 
 [MIT](LICENSE) — educational and defensive use only, within the scope above.
