@@ -1,0 +1,67 @@
+<!--
+  Reveal / awareness landing page.
+  Set this as the campaign's "Redirect to" (or a second landing page) so that
+  whoever clicks — i.e. you — always lands on a clear "this was a test" page
+  that teaches the red flags. This is the ethical centre of the lab.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>This was a phishing test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+           background:#0f1420; color:#e8edf5; display:flex; min-height:100vh;
+           align-items:center; justify-content:center; padding:24px; }
+    .card { max-width:620px; width:100%; background:#171e2e; border:1px solid #27324a;
+            border-radius:16px; padding:40px; }
+    .badge { display:inline-block; background:#f59f0022; color:#f6b73c;
+             border:1px solid #f59f0055; padding:4px 12px; border-radius:999px;
+             font-size:13px; font-weight:600; letter-spacing:.3px; }
+    h1 { font-size:26px; margin:18px 0 8px; }
+    p  { line-height:1.6; color:#b7c2d6; font-size:15px; }
+    ul { line-height:1.7; color:#b7c2d6; font-size:15px; padding-left:20px; }
+    .flag { color:#ff8f8f; font-weight:600; }
+    .ok   { color:#7ee2a8; font-weight:600; }
+    code { background:#0f1420; border:1px solid #27324a; border-radius:6px;
+           padding:1px 6px; font-size:13px; }
+    .foot { margin-top:26px; font-size:13px; color:#7a8699; border-top:1px solid #27324a; padding-top:16px; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <span class="badge">SECURITY AWARENESS TEST</span>
+    <h1>If this were real, you'd just have been phished.</h1>
+    <p>
+      This page is the end of a <strong>controlled, self-targeted</strong>
+      phishing simulation. No account was touched and nothing was compromised.
+      The point is to recognise the signals next time.
+    </p>
+
+    <h3>🚩 Red flags in the email you clicked</h3>
+    <ul>
+      <li><span class="flag">Urgency:</span> "within 24 hours or access will be suspended" — pressure to act fast.</li>
+      <li><span class="flag">Mismatch:</span> a friendly display name hiding a sending address that doesn't match the real domain.</li>
+      <li><span class="flag">Generic hook:</span> "a new sign-in was detected" — a lure that fits almost anyone.</li>
+      <li><span class="flag">Link, not navigation:</span> you were asked to click, not to open the site yourself.</li>
+    </ul>
+
+    <h3>✅ What to do instead</h3>
+    <ul>
+      <li><span class="ok">Don't click.</span> Open the service yourself from a bookmark or by typing the address.</li>
+      <li><span class="ok">Check the real sender</span> — expand the address, not just the display name.</li>
+      <li><span class="ok">Turn on phishing-resistant MFA</span> (passkeys / FIDO2) so a stolen password isn't enough.</li>
+      <li><span class="ok">Report it</span> to your security team / provider.</li>
+    </ul>
+
+    <p class="foot">
+      Part of a defensive learning project. Want the technical side? See how the
+      email's <code>SPF</code> / <code>DKIM</code> / <code>DMARC</code> results
+      decide whether a spoof like this even reaches the inbox.
+    </p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!--
+  Lure email template for Gophish (import under Email Templates).
+  Deliberately uses the classic phishing levers so they can be studied:
+    - urgency ("within 24 hours")
+    - authority (looks like an account/security team)
+    - a single call-to-action button wrapping the tracked {{.URL}}
+  {{.FirstName}} and {{.URL}} are Gophish variables, filled at send time.
+  This is for a self-targeted awareness lab only.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="margin:0;padding:0;background:#f2f4f7;font-family:Arial,Helvetica,sans-serif;color:#1f2733;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f4f7;padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="520" cellpadding="0" cellspacing="0"
+               style="background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid #e3e8ef;">
+          <tr>
+            <td style="background:#0b5fff;padding:20px 28px;color:#ffffff;font-size:18px;font-weight:bold;">
+              Keymate Security
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px;">
+              <p style="margin:0 0 16px;font-size:16px;">Hi {{.FirstName}},</p>
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.5;">
+                We detected a new sign-in to your account from an unrecognised
+                device. For your protection, confirmation is required
+                <strong>within 24 hours</strong> or access will be temporarily
+                suspended.
+              </p>
+              <p style="margin:0 0 24px;font-size:15px;line-height:1.5;">
+                If this was you, confirm your account to keep everything active:
+              </p>
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 24px;">
+                <tr>
+                  <td align="center" style="border-radius:6px;background:#0b5fff;">
+                    <a href="{{.URL}}"
+                       style="display:inline-block;padding:13px 30px;font-size:15px;
+                              color:#ffffff;text-decoration:none;font-weight:bold;">
+                      Confirm my account
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0 0 6px;font-size:12px;color:#6b7280;line-height:1.5;">
+                If the button doesn't work, copy and paste this link:<br>
+                <span style="color:#0b5fff;">{{.URL}}</span>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 28px;background:#f8fafc;border-top:1px solid #e3e8ef;
+                       font-size:11px;color:#9aa5b1;line-height:1.5;">
+              You received this because an action was requested on your account.
+              This is a controlled security-awareness simulation.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <!-- Gophish open-tracking pixel -->
+  {{.Tracker}}
+</body>
+</html>

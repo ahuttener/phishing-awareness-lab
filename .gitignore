@@ -1,0 +1,25 @@
+# Gophish binary + runtime — never commit these
+gophish.exe
+gophish
+*.zip
+
+# Gophish database and logs (contain campaign/event data)
+gophish.db
+*.log
+debug.log
+
+# MailHog binary / captured mail store
+MailHog*.exe
+mailhog*
+*.maildir/
+
+# TLS material generated on first run
+gophish_admin.crt
+gophish_admin.key
+example.crt
+example.key
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
