@@ -1,105 +1,125 @@
-# Phishing Awareness Lab
+<div align="center">
 
-A self-contained, **ethically-scoped** lab that builds a controlled phishing
-campaign with [Gophish](https://getgophish.com/) and then analyses it from the
-**defender's** side — email authentication (SPF / DKIM / DMARC), header forensics
-and user-facing warning signs.
+# 🎣 Phishing Awareness Lab
 
-> **Why this exists.** Phishing is still the number-one initial access vector in
-> real breaches. The best way to learn to *defend* against it is to build one in
-> a closed environment and dissect exactly why it does — or does not — reach the
-> inbox. This repo does that against a single consenting target: **me**.
+**A controlled, self-targeted phishing simulation — built to be *studied from the defender's side*.**
 
----
+Set up a real campaign with [Gophish](https://getgophish.com/), fire it at your own inbox,
+then dissect exactly why it did (or didn't) land — SPF, DKIM, DMARC and header forensics.
 
-## 🔒 Scope & ethics (read first)
+<br>
 
-This lab is **only** ever run against the author's own mailbox, on the author's
-own machine, with no services exposed to the internet.
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Gophish](https://img.shields.io/badge/Gophish-v0.12.1-00a98f)
+![Platform](https://img.shields.io/badge/platform-Windows-0078d6)
+![Scope](https://img.shields.io/badge/scope-self--targeted%20only-f59f00)
+![Use](https://img.shields.io/badge/use-educational%20%2F%20defensive-7ee2a8)
 
-- The only recipient is the author's own e-mail address.
-- The admin panel and phishing server bind to `127.0.0.1` (localhost) only.
-- No real third party is ever targeted. No credentials of any real service are
-  harvested — the capture page points at a login the author controls.
-- Every simulated message ends on a **reveal page** that explains it was a test.
-
-Running a phishing message against anyone else, even as a prank, without written
-authorisation is illegal in most jurisdictions (Ireland: *Criminal Justice
-(Offences Relating to Information Systems) Act 2017*; Brazil: *Lei 14.155/2021*).
-**Don't.** The skill that gets you hired is doing this *safely and in scope*.
+</div>
 
 ---
 
-## What's in here
+> [!WARNING]
+> **Scope & ethics — read first.** This lab is **only ever** run against the
+> author's own mailbox, on the author's own machine, with nothing exposed to the
+> internet. Sending a phishing message to anyone else — even as a prank — without
+> written authorisation is a crime (🇮🇪 *Criminal Justice (Offences Relating to
+> Information Systems) Act 2017*; 🇧🇷 *Lei 14.155/2021*). The skill that gets you
+> hired is doing this **safely and in scope** — that is the whole point of the lab.
 
-```
-phishing-awareness-lab/
-├── README.md                     ← you are here
-├── LICENSE
-├── .gitignore                    ← keeps the gophish binary & DB out of git
-├── docs/
-│   ├── 01-setup.md               ← install Gophish + local mail catcher
-│   ├── 02-run-a-campaign.md      ← build template → landing → group → launch
-│   └── 03-defensive-analysis.md  ← the part that matters: why it worked/failed
-├── templates/
-│   ├── email-confirm-account.html   ← the lure (import into Gophish)
-│   └── landing-awareness.html       ← the reveal page ("this was a test")
-└── analysis/
-    └── email-auth-checklist.md      ← SPF/DKIM/DMARC reading guide
-```
+## 📑 Contents
 
-## Architecture
+- [Why this project](#-why-this-project)
+- [Architecture](#-architecture)
+- [What's in the repo](#-whats-in-the-repo)
+- [Quick start](#-quick-start)
+- [The learning goal](#-the-learning-goal)
+- [License](#-license)
+
+## 💡 Why this project
+
+Phishing is still the **number-one initial-access vector** in real breaches. The
+most honest way to learn to *defend* against it is to build one in a sealed
+environment and take it apart. This repo does that end-to-end:
+
+- 🧰 **Build** — a full Gophish campaign: sending profile, lure, cloned landing page, tracking.
+- 🎯 **Scope** — a single consenting target (me), everything on `127.0.0.1`.
+- 🛡️ **Analyse** — read the email's authentication results and map each weakness to a real control.
+- 🔁 **Connect** — ties into a real DMARC rollout across three live domains behind Cloudflare.
+
+## 🏗️ Architecture
 
 ```
             ┌──────────────────────────────────────────────┐
             │              your machine (localhost)         │
             │                                               │
   Gophish   │   ┌─────────┐   lure email    ┌───────────┐   │
-  admin ────┼──▶│ Gophish │────────────────▶│ MailHog   │   │
-  :3333     │   │ server  │                 │ :1025     │   │
+  admin ────┼──▶│ Gophish │────────────────▶│  MailHog  │   │
+  :3333     │   │ server  │                 │   :1025   │   │
             │   └────┬────┘                 └─────┬─────┘   │
             │        │ tracked link               │ web UI  │
             │        ▼                             ▼         │
-            │   ┌──────────┐                http://127.0.0.1:8025
-            │   │ landing/ │  ← you click, it logs the event,
-            │   │ reveal   │    then shows "this was a test"
-            │   └──────────┘                               │
+            │   ┌──────────┐              http://127.0.0.1:8025
+            │   │ landing/ │  ← you click → event is logged →
+            │   │ reveal   │    "this was a test" page is shown
+            │   └──────────┘                                │
             └──────────────────────────────────────────────┘
 ```
 
 Two sending modes are documented:
 
-1. **MailHog (default)** — a local mail catcher. Nothing leaves the machine; you
-   read the captured mail in a browser. Zero credentials, zero blast radius.
-2. **Real Gmail SMTP** — optional, to watch the lure actually land in an inbox
-   and to inspect real SPF/DKIM/DMARC results. Uses a Google *app password*,
-   never the account password.
+| Mode | What it does | Credentials | Blast radius |
+|---|---|---|---|
+| **MailHog** *(default)* | Catches mail locally, read it in a browser | none | zero — nothing leaves the PC |
+| **Real Gmail SMTP** *(optional)* | Watch the lure hit a real inbox, inspect real SPF/DKIM/DMARC | Google **app password** (never the real one) | one inbox: mine |
 
-## Quick start
+## 📂 What's in the repo
 
-```powershell
-# 1. download Gophish (see docs/01-setup.md for the verified link + hash)
-# 2. from this folder:
-.\gophish.exe
-# 3. note the one-time admin password printed in the console
-# 4. open https://127.0.0.1:3333  (self-signed cert warning is expected)
+```
+phishing-awareness-lab/
+├── README.md
+├── LICENSE                          # MIT
+├── .gitignore                       # keeps the Gophish binary & DB out of git
+├── docs/
+│   ├── 01-setup.md                  # install Gophish + local mail catcher
+│   ├── 02-run-a-campaign.md         # template → landing → group → launch
+│   └── 03-defensive-analysis.md     # ⭐ why it worked / how to stop it
+├── templates/
+│   ├── email-confirm-account.html   # the lure (import into Gophish)
+│   └── landing-awareness.html       # the "this was a test" reveal page
+└── analysis/
+    └── email-auth-checklist.md      # SPF / DKIM / DMARC reading guide
 ```
 
-Then follow [`docs/02-run-a-campaign.md`](docs/02-run-a-campaign.md).
+## 🚀 Quick start
 
-## What I learned (fill this in as you go)
+```powershell
+# 1. download Gophish v0.12.1  (verified link + hash in docs/01-setup.md)
+# 2. from this folder:
+.\gophish.exe
+# 3. copy the one-time admin password printed in the console
+# 4. open https://127.0.0.1:3333   (self-signed cert warning is expected)
+```
 
-This section is the real portfolio value. After running a campaign, document:
+Full walkthrough → **[docs/01-setup.md](docs/01-setup.md)** then
+**[docs/02-run-a-campaign.md](docs/02-run-a-campaign.md)**.
 
-- How the forged `From:` name renders in the client vs. the real sending address.
-- What the received message's **Authentication-Results** header says
-  (`spf=`, `dkim=`, `dmarc=`) and *why*.
-- Whether Gmail flagged it, and which signal did it.
-- One concrete control that would have stopped it (e.g. a strict DMARC policy on
-  the spoofed domain — see [`analysis/email-auth-checklist.md`](analysis/email-auth-checklist.md)).
+## 🎓 The learning goal
 
----
+Building the campaign is 20% of the value. The portfolio payoff is the
+**defensive write-up** in [docs/03-defensive-analysis.md](docs/03-defensive-analysis.md):
 
-## License
+- How a forged **display name** hides a non-matching sending address — the whole social-engineering surface.
+- What the received message's `Authentication-Results` header reveals (`spf=`, `dkim=`, `dmarc=`) and *why*.
+- Mapping each weakness to a concrete control — ending at **DMARC `p=reject`**, which turns a delivered spoof into one *refused at the gateway*.
 
-MIT — see [LICENSE](LICENSE). Educational use only, within the scope above.
+> 🔗 This pairs with a real deployment: DMARC was reviewed and hardened across
+> three live domains (`radarrider.com`, `mykeymate.com`, `br-deals.com`) behind
+> Cloudflare — see the worked example in
+> [analysis/email-auth-checklist.md](analysis/email-auth-checklist.md).
+
+## 📝 License
+
+[MIT](LICENSE) — educational and defensive use only, within the scope above.
+
+<div align="center"><sub>Built as a security-awareness portfolio project.</sub></div>
